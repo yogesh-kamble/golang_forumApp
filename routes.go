@@ -1,8 +1,8 @@
 package main
 
 import (
+    "strings"
     "net/http"
-
     "github.com/gorilla/mux"
 )
 
@@ -18,6 +18,7 @@ type Routes []Route
 func NewRouter() *mux.Router {
 
     router := mux.NewRouter().StrictSlash(true)
+    http.Handle("/", &CorsWrapper{router})
     //router.Headers("Content-Type", "application/json")
     for _, route := range routes {
         var handler http.Handler
@@ -35,16 +36,10 @@ func NewRouter() *mux.Router {
 
 var routes = Routes{
     Route{
-        "Index",
-        "GET",
-        "/",
-        Index,
-    },
-    Route{
-        "TodoIndex",
+        "GetForums",
         "GET",
         "/forums",
-        TodoIndex,
+        getForums,
     },
     Route{
         "AddForum",
@@ -53,9 +48,54 @@ var routes = Routes{
         createForum,
     },
     Route{
-        "TodoShow",
+        "getForum",
         "GET",
         "/forums/{forumId}",
-        TodoShow,
+        getForum,
     },
+}
+
+type CorsWrapper struct {
+    router *mux.Router
+}
+
+func (this *CorsWrapper) ServeHTTP(
+    response http.ResponseWriter,
+    request *http.Request) {
+    allowedMethods := []string{
+        "POST",
+        "GET",
+        "OPTIONS",
+        "PUT",
+        "PATCH",
+        "DELETE",
+    }
+
+    allowedHeaders := []string{
+        "Accept",
+        "Content-Type",
+        "Content-Length",
+        "Accept-Encoding",
+        "Authorization",
+        "X-CSRF-Token",
+        "X-Auth-Token",
+    }
+
+    if origin := request.Header.Get("Origin"); origin != "" {
+        response.Header().Set("Access-Control-Allow-Origin", origin)
+
+        response.Header().Set(
+            "Access-Control-Allow-Methods",
+            strings.Join(allowedMethods, ", "))
+
+        response.Header().Set(
+            "Access-Control-Allow-Headers",
+            strings.Join(allowedHeaders, ", "))
+    }
+
+    if request.Method == "OPTIONS" {
+        return
+    }
+
+    this.router.ServeHTTP(response, request)
 }

@@ -1,16 +1,13 @@
 package main
 
-/*import (
-        "fmt"
-        "log"
-        "gopkg.in/mgo.v2"
-        "gopkg.in/mgo.v2/bson"
-)*/
 
 type Forum struct {
         Email string
         Title string
         Message string
+        CreatedTime int64
+        UpdatedTime int64
 }
 
 var forums []Forum
+var forum Forum
