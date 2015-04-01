@@ -18,7 +18,7 @@ type Routes []Route
 func NewRouter() *mux.Router {
 
     router := mux.NewRouter().StrictSlash(true)
-    http.Handle("/", &CorsWrapper{router})
+    //http.Handle("/", &CorsWrapper{router})
     //router.Headers("Content-Type", "application/json")
     for _, route := range routes {
         var handler http.Handler

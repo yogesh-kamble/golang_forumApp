@@ -25,7 +25,7 @@ func getForums(w http.ResponseWriter, r *http.Request) {
         Todo{Name: "Write presentation"},
         Todo{Name: "Host meetup"},
     }*/
-    w.Header().Set("Access-Control-Allow-Origin", "*")
+    //w.Header().Set("Access-Control-Allow-Origin", "*")
     //w.Header().Set("Content-Type", "application/json")
     c := conn.C("forum")
     error := c.Find(nil).All(&forums)
@@ -52,8 +52,8 @@ func getForum(w http.ResponseWriter, r *http.Request) {
 }
 
 func createForum(w http.ResponseWriter, r *http.Request){
-    w.Header().Set("Access-Control-Allow-Origin", "*")
-    w.Header().Set("Content-Type", "application/json")
+    //w.Header().Add("Access-Control-Allow-Origin", "*")
+    //w.Header().Add("Content-Type", "application/json")
     var forum Forum
     decoder := json.NewDecoder(r.Body)
     err := decoder.Decode(&forum)
