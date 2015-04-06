@@ -5,7 +5,7 @@ import (
 )
 
 func connect() *mgo.Database {
-      session, err := mgo.Dial("mongodb://127.0.0.1:27017")
+      session, err := mgo.Dial("mongodb://yogesh:yogesh@ds045031.mongolab.com:45031/forum_app")
         if err != nil {
                 panic(err)
         }
